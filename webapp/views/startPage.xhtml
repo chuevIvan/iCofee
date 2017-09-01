@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:outputStylesheet library="style" name="Styleshit.css"/>
+<f:view>
+
+    <h:head>
+        <title>#{msg[headerFormStartPage]}</title>
+    </h:head>
+
+    <ui:composition template="layout.xhtml">
+    <ui:define name="title">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center"  class="outer_table">
+            <tr>
+                <td>
+                    <table cellpadding="0" cellspacing="0" border="0" align="center">
+                        <tr>
+                            <td align="center">
+                                <p:graphicImage library="images" name="logo.png" style="width: 100px; height: 130px"/>
+                                <br/>
+                                #{msg['compHeaderStartPage']}
+                                <br/>
+                                <p:outputLabel value="#{msg['exchangeStartPage']} #{currencyCourser.getServerJson()}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </ui:define>
+
+    <ui:define name="content">
+
+            <h:body>
+
+                <br/>
+                <h:form id="startPage">
+
+                    <h:outputStylesheet library="style" name="Styleshit.css"/>
+                    <p:growl id="growlMain" showDetail="true" />
+
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center"  class="outer_table">
+
+                        <tr>
+                            <td>
+                                <table cellpadding="0" cellspacing="0" border="0" align="center">
+                                    <tr>
+                                        <td align="center">
+                                            <p:panelGrid style="max-width: 1200px">
+
+                                                <f:facet name="header">
+                                                    <p:row>
+                                                        <p:column colspan="2">#{msg['greetingStartPage']}</p:column>
+                                                    </p:row>
+                                                </f:facet>
+                                                <p:column>
+
+                                                    <!--кнопка перехода на страницу создания заказа-->
+                                                    <p:commandButton id="createButton"
+                                                                     value="#{msg['createButtonStartPage']}"
+                                                                     action="createPage">
+                                                        <f:setPropertyActionListener value="" target="#{createPageBean.orderEntity}">
+                                                            <f:converter converterId="orderConverter"/>
+                                                        </f:setPropertyActionListener>
+                                                        <f:actionListener binding="#{createPageBean.init()}"/>
+                                                        <f:ajax execute="@this" render="@form" />
+                                                    </p:commandButton>
+                                                </p:column>
+
+                                                <p:column>
+
+                                                    <!--таблица с заказами сделанными ранее-->
+                                                    <p:dataTable id="dataTable"
+                                                                 var="entity"
+                                                                 value="#{startPageBean.getOrderEntityList()}">
+                                                        <p:column headerText="#{msg['headerTextStartPage']}">
+                                                            <h:outputText id="opt" value="#{entity}">
+                                                                <f:converter converterId="orderConverter"/>
+                                                            </h:outputText>
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </p:column>
+
+                                            </p:panelGrid>
+
+                                            <br/>
+
+                                            <!--кнопка перехода на страницу редактирования заказов-->
+                                            <p:commandButton id="editAllButton"
+                                                             value="#{msg['editAllButtonStartPage']}"
+                                                             icon="ui-icon-edit"
+                                                             action="editPage"
+                                                             update="startPage:dataTable, startPage:editAllButton">
+                                            </p:commandButton>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </h:form>
+            </h:body>
+
+        </ui:define>
+    </ui:composition>
+
+</f:view>
+
+</html>

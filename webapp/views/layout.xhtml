@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:outputStylesheet library="style" name="Styleshit.css"/>
+<h:head>
+    <title>
+        <ui:insert name="title">
+            iCoffee
+        </ui:insert>
+    </title>
+</h:head>
+<h:body>
+
+    <h1>
+        <ui:insert name="title" >
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center"  class="outer_table">
+                <tr>
+                    <td>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center">
+                            <tr>
+                                <td align="center">
+                                    <p:graphicImage library="images"
+                                                    name="logo.png"
+                                                    style="width: 100px; height: 130px" />
+                                </td>
+                                <td align="center" style="width: 50px;">
+                                </td>
+                                <td align="center">
+                                    iCoffee - is always a good idea
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </ui:insert>
+    </h1>
+    <h1>
+        <ui:insert name="headerUI" >
+        </ui:insert>
+    </h1>
+    <hr/>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center"  class="outer_table">
+        <tr>
+            <td>
+                <table cellpadding="0" cellspacing="0" border="0" align="center">
+                    <tr>
+                        <td align="center">
+                            <ui:insert name="content">iCoffee</ui:insert>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <hr/>
+    <h:outputText value="#{msg['postfix']}"
+                  style="font-style: italic"/>
+</h:body>
+</html>

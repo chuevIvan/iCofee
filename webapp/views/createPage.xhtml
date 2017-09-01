@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:outputStylesheet library="style" name="Styleshit.css"/>
+<f:view>
+
+    <h:head>
+        <title>#{msg['headerFormCreatePage']}</title>
+    </h:head>
+
+    <ui:composition template="layout.xhtml">
+        <ui:define name="title">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center"  class="outer_table">
+                <tr>
+                    <td>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center">
+                            <tr>
+                                <td align="center">
+                                    <p:graphicImage library="images"
+                                                    name="logo.png"
+                                                    style="width: 100px; height: 130px"/>
+                                    <br/>
+                                    #{msg['compHeaderCreatePage']}
+                                    <br/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </ui:define>
+
+        <ui:define name="content">
+            <h:body>
+                <h:form id="secondPage">
+                    <h:outputStylesheet library="style" name="Styleshit.css"/>
+                    <p:growl id="growlMain" showDetail="true" />
+
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center"  class="outer_table">
+                        <tr>
+                            <td>
+                                <table cellpadding="0" cellspacing="0" border="0" align="center">
+                                    <tr>
+                                        <td align="center">
+                                            <p:panelGrid id="gridPane"
+                                                         columns="2"
+                                                         style="width: 1250px;">
+
+                                                <f:facet name="header">
+                                                    <p:row>
+                                                        <p:column colspan="7">#{msg['greetingCreatePage']}</p:column>
+                                                    </p:row>
+                                                </f:facet>
+
+                                                <p:column style="width:500px;">
+
+                                                    <h3>#{msg['accordionHeaderCreatePage']}</h3>
+                                                    <!--аккордион с кофе-->
+                                                    <p:accordionPanel id="centerAccordionPanel"
+                                                                      value="#{createPageBean.coffeeEntityList}"
+                                                                      var="coffeeEntity"
+                                                                      style="width: 500px;"
+                                                                      activeIndex="#{createPageBean.indexActiveAccordionPanel}">
+                                                        <p:ajax event="tabChange" listener="#{createPageBean.orderEntity.setCoffeeEntity(coffeeEntity)}"
+                                                                                  update="secondPage:fullPrice, secondPage:fullPriceCoffee"  />
+                                                        <p:tab title="Coffee - #{coffeeEntity.name}" style="width: 500px;">
+                                                            <h:panelGrid columns="2"
+                                                                         cellpadding="5"
+                                                                         style="width: 450px;" >
+
+                                                                <f:facet name="header">
+                                                                    <p:graphicImage library="images"
+                                                                                    name="#{coffeeEntity.id}.png"
+                                                                                    style="width: 208px; height: 168px"/>
+                                                                </f:facet>
+
+                                                                <h:outputText value="Price:"
+                                                                              styleClass="coffeeName" />
+                                                                <h:outputText value="#{coffeeEntity.price}" />
+
+                                                            </h:panelGrid>
+                                                        </p:tab>
+                                                    </p:accordionPanel>
+                                                </p:column>
+
+                                                <p:column style="width: 750px;">
+
+                                                    <p:growl id="growl"
+                                                             showDetail="true" />
+
+                                                    <h:panelGrid id="gridCenter"
+                                                                 columns="2"
+                                                                 cellpadding="5">
+
+                                                        <h:outputText styleClass="labelDescription"
+                                                                      value="#{msg['countCoffeeCreatePage']}"/>
+                                                        <h:inputText id="countCoffee"
+                                                                     value="#{createPageBean.orderEntity.countCoffee}"
+                                                                     title="from 0,10 to 20,00"
+                                                                     validator="#{createPageBean.validateCount}"
+                                                                     converterMessage="Please enter only digits"
+                                                                     styleClass="labelValue"
+                                                                     required="true">
+                                                            <p:ajax event="keyup"
+                                                                    update="secondPage:fullPrice, secondPage:fullPriceCoffee"  />
+                                                        </h:inputText>
+
+                                                        <h:outputText styleClass="labelDescription"
+                                                                      value="#{msg['fullPriceCoffeeCreatePage']}"/>
+                                                        <h:outputText id="fullPriceCoffee"
+                                                                      value="#{createPageBean.fullPriceCoffee}"
+                                                                      size="20"
+                                                                      styleClass="labelValue">
+                                                            <f:convertNumber pattern="#0.00" />
+                                                        </h:outputText>
+
+                                                        <h:outputText styleClass="labelDescription"
+                                                                      value="#{msg['deliveryEntityCreatePage']}"/>
+                                                        <h:selectOneRadio id="deliveryEntity"
+                                                                          value="#{createPageBean.orderEntity.deliveryEntity}"
+                                                                          converter="deliveryConverter"
+                                                                          styleClass="labelValue"
+                                                                          required="true">
+                                                            <f:selectItems value="#{createPageBean.deliveryEntityList}"
+                                                                           var="de"
+                                                                           itemLabel="#{de.name} (#{de.price}$)"
+                                                                           itemValue="#{de}"/>
+                                                            <p:ajax execute="@this"
+                                                                    update="secondPage:fullPrice, secondPage:fullPriceCoffee"/>
+                                                        </h:selectOneRadio>
+
+                                                        <h:outputText styleClass="labelDescription"
+                                                                      value="#{msg['startDateCreatePage']}"/>
+                                                        <p:calendar id="startDate"
+                                                                    value="#{createPageBean.orderEntity.startDate}"
+                                                                    mindate="#{createPageBean.getMinStartDate()}"
+                                                                    maxdate="#{createPageBean.orderEntity.endDate}"
+                                                                    pattern="#{dater.datePattern}"
+                                                                    styleClass="labelValue"
+                                                                    title="pattern #{dater.datePattern}"
+                                                                    onchange="submit()"
+                                                                    effect="fadeIn"
+                                                                    converterMessage="Error: Enter a value with format #{dater.datePattern}">
+                                                            <p:ajax event="dateSelect" update="endDate"/>
+                                                        </p:calendar>
+
+                                                        <h:outputText styleClass="labelDescription"
+                                                                      value="#{msg['endDateCreatePage']}"/>
+                                                        <p:calendar id="endDate"
+                                                                    value="#{createPageBean.orderEntity.endDate}"
+                                                                    mindate="#{createPageBean.getMinEndDate()}"
+                                                                    disabled="#{empty createPageBean.orderEntity.startDate}"
+                                                                    pattern="#{dater.datePattern}"
+                                                                    styleClass="labelValue"
+                                                                    title="pattern #{dater.datePattern}"
+                                                                    onchange="submit()"
+                                                                    effect="fadeIn"
+                                                                    converterMessage="Error: Enter a value with format #{dater.datePattern}">
+                                                            <p:ajax event="dateSelect"
+                                                                    update="secondPage:startDate, secondPage:saveButton"/>
+                                                        </p:calendar>
+
+                                                        <h:outputText styleClass="labelDescription"
+                                                                      value="#{msg['fullPriceCreatePage']}"/>
+                                                        <h:outputText id="fullPrice"
+                                                                      value="#{createPageBean.fullPrice}"
+                                                                      size="20" >
+                                                            <f:convertNumber pattern="#0.00" />
+                                                        </h:outputText>
+
+                                                    </h:panelGrid>
+
+                                                    <br/>
+
+                                                    <!--кнопка сохранения и перехода на стартовую страницу-->
+                                                    <h:commandButton id="saveButton"
+                                                                     styleClass="buttonStyle"
+                                                                     type="submit"
+                                                                     value="#{msg['saveButtonCreatePage']}"
+                                                                     update="glowl"
+                                                                     action="startPage"
+                                                                     icon="ui-icon-star"
+                                                                     disabled="#{empty createPageBean.orderEntity.endDate}"
+                                                                     actionListener="#{startPageBean.showMessage}">
+                                                        <f:actionListener binding="#{createPageBean.saveCoffeeOrder()}"/>
+                                                        <f:attribute name="typeMessage"
+                                                                     value="Save"/>
+                                                    </h:commandButton>
+
+                                                    <!--кнопка перехода на стартовую страницу-->
+                                                    <h:commandButton id="backButton"
+                                                                     styleClass="buttonStyle"
+                                                                     value="#{msg['backButtonCreatePage']}"
+                                                                     update="glowl, secondPage:startDate, secondPage:endDate, secondPage:salary"
+                                                                     action="startPage"
+                                                                     actionListener="#{startPageBean.showMessage}" >
+                                                        <f:attribute name="typeMessage"
+                                                                     value="Back"/>
+                                                        <p:ajax update="gridPane"
+                                                                resetValues="true"/>
+                                                    </h:commandButton>
+                                                </p:column>
+                                            </p:panelGrid>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+</f:view>
+</html>

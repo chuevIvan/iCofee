@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+>
+<h:outputStylesheet library="style" name="Styleshit.css"/>
+<f:view>
+
+    <h:head>
+        <title>#{msg['headerFormDeletePage']}</title>
+    </h:head>
+
+    <ui:composition template="layout.xhtml">
+        <ui:define name="title">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center"  class="outer_table">
+                <tr>
+                    <td>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center">
+                            <tr>
+                                <td align="center">
+                                    <p:graphicImage library="images"
+                                                    name="logo.png"
+                                                    style="width: 100px; height: 130px"/>
+                                    <br/>
+                                    #{msg['compHeaderDeletePage']}
+                                    <br/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </ui:define>
+        <ui:define name="content">
+            <h:body>
+                <br/>
+                <h:form>
+                    <h:outputStylesheet library="style" name="Styleshit.css"/>
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center"  class="outer_table">
+                        <tr>
+                            <td>
+                                <table cellpadding="0" cellspacing="0" border="0" align="center">
+                                    <tr>
+                                        <td align="center">
+                                            <p:panelGrid style="max-width: 1250px">
+                                                <f:facet name="header">
+                                                    <p:row>
+                                                        <p:column colspan="2">#{msg['headerTableDelete']}</p:column>
+                                                    </p:row>
+                                                </f:facet>
+
+                                                <p:column>
+                                                    <h:outputText value="#{deletePageView.orderEntity}"
+                                                                  converter="orderConverter"/>
+                                                </p:column>
+                                            </p:panelGrid>
+
+                                            <!--кнопка удаления-->
+                                            <h:commandButton id="deleteButton"
+                                                             styleClass="buttonStyle"
+                                                             value="#{msg['deleteButtonDelete']}"
+                                                             update="glowl"
+                                                             action="editPage"
+                                                             actionListener="#{deletePageView.deleteOrder}">
+                                                <f:param name="paramDel" value="#{deletePageView.orderEntity.toString()}"/>
+                                                <f:actionListener binding="#{editPageBean.showMessage()}"/>
+                                            </h:commandButton>
+
+                                            <!--кнопка возврата к стартовой странице-->
+                                            <h:commandButton id="backButton"
+                                                             styleClass="buttonStyle"
+                                                             value="#{msg['backButtonDelete']}"
+                                                             update="glowl"
+                                                             action="home"
+                                                             actionListener="#{startPageBean.showMessage}">
+                                                <f:attribute name="typeMessage"
+                                                             value="Back"/>
+                                            </h:commandButton>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+</f:view>
+</html>
